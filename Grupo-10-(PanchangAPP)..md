@@ -1,3 +1,4 @@
+Analisis Inicial
 ## Integrantes y roles
 - **(CEO) Julián Barcia Facal**
 Encargado de coordinación, comunicación, documentación y gestión del proyecto. Realizará testing de integración, al igual que participará en la unificación y creación de módulos da arquitectura.
@@ -54,59 +55,4 @@ El modelo de clasificación y estadísticas se asemeja en gran manera a nuestra 
 
 ##  Diseño de la arquitectura de comunicaciones.
 ![Diseño](https://github.com/rubenTome/APM/blob/main/dise%C3%B1o_arquitectura/Dise%C3%B1oArqComunicaciones.svg)
-
-## División Componentes
-
-### Actividades
-Solo se cuenta con 2 actividades en este proyecto:
-- **Actividad de Login:** Pantalla inicial en la que solo se muestra el botón de login con Google.
-- **Actividad Principal:** Pantalla principal sobre la que se ejecuta la totalidad de la aplicación, sobre esta se servirán todos los fragments a emplear.
-### Fragment 
-Nuestra aplicación se va componer mayoritariamente de fragments ya que tenemos tanto una toolbar con un NavDrawer, como un BottomNavigation que nos permitirán navegar entre ellos. 
-En el NavDrawer se mostrará un header con la información de usuario y diversas opciones:
-- **Home Fragment:** Nos lleva de vuelta a la pantalla principal cerrando el menú.
-- **Settings Fragment:** Nos lleva al fragment de los ajustes de la app.
-- **Botón de Share:** Botón de compartir la app.
-- **About Us:** Boton que redirecciona al Github del proyecto.
-- **Log out:** Botón que cerra la sesión de la cuenta abierta en la primera actividad.
-Por su parte el BottomNav cuenta con tres opciones:
-- **Ranking Fragment:** Fragment que muestra el ranking de los jugadores.
-- **Home Fragment:** Nos lleva de vuelta a la pantalla principal del mapa.
-- **Calendario Fragment:** Fragment que muestra la lista de torneos en activo.
-
-A continuación se enumeran todos los fragments y su utilidad:
-- **Home Fragment**: Fragment principal que cuenta mostrará el mapa y todos los eventos en el. Clickando en estos eventos se puede acceder a su información o formulario de inscripción. Además esta pantalla cuenta un botón en la parte inferior para crear un nuevo evento. En caso de querer ver los eventos en forma de lista, el usuario solo tendrá que arrastrar la pestaña de la sección inferior para acceder al fragment de lista de eventos.
-- **Crear Evento:** Fragment que nos muestra un formulario para crear nuestro evento, indicando nombre formato, fecha o capacidad máxima. Se puede acceder o bien desde el botón en el HomeFragment o en el botón del fragment de Lista de Eventos. Se podrá acceder a el desde el mapa al crear mantener presionado y crear un evento en el.
-- **Lista de Eventos:** Fragment que muestra la lista de eventos disponibles visibles en el mapa pero mediante un RecyclerView. Solo se puede acceder a el arrastrando la pestaña que se muestra en el HomeFragment, por ahora este es un botón que se cambiará en el futuro.
-- **Fragment Inscribirse en Evento Casual:** Fragment accesible desde o bien la lista de eventos o bien el mapa. Este Fragment permite al usuario ver la información del evento junto con los comentarios del administrador. Cuenta con una sección que muestra el tiempo que se espera en ese lugar a la hora del evento. Además cuenta con un botón de como llegar que permite acceder a otro fragment que guie al usuario. 
-- **Fragment Inscribirse en Torneo:** Fragment accesible desde o bien la lista de eventos o bien el mapa. La principal diferencia con el fragment anterior es que a la hora de inscribirse no existe un botón que lo haga directamente. En los torneos el administrador ha creado unos equipos en los cuales cada uno de los usuarios se debe inscribir.
-- **Fragment Direcciones:** Fragment unicamente accesible con el botón __Como Llegar__ de los fragments de inscripción. Este muestra una ruta desde la ubicación actual del usuario a la localización del torneo
-- **Ranking Fragment:** Fragment que muestra el ranking de los jugadores con un RecyclerView. Se accede a el mediante el bottomNavigation. Si se presiona sobre cualquiera de los jugadores del ranking nos lleva a su perfil.
-- **Profile Fragment:** Fragment que muestra la información de un usuario. Existen dos maneras de acceder a el o bien por el paso del ranking anterior o bien mediante el botón de perfil de la ToolBar. En caso de acceder desde el botón de la Toolbar la app también muestra un TabLayout superior donde el usuario puede moverse entre este fragment y el de historial de partidos.
-- **Fragment Historial:** Fragment que muestra los resultados de los partidos en los que usuario ha participado. Accesible unicamente desde el TabLayout del perfil del usuario de la propia aplicación.
-- **Calendario Fragment:** Fragment que muestra la lista de torneos en activo con un RecyclerView solo se puede acceder desde el bottomNavigation. En caso de clickar en cualquiera de los eventos nos lleva al fragment de su información.
-- **Fragment Partidos**: Desde el Fragment de calendario si se accede a uno de los eventos este será el fragment que se muestre por defecto. En el se puede ver los partidos de este evento y sus resultados, en caso de ser dueño del evento puede modificar los resultados. Cuenta con un TabLayout en la parte superior para cambiar entre este fragment y el de clasificiación de equipos.
-- **Fragment Clasificiación**: Fragment accesible desde el TabLayout anteriormente explicado. Muestra una clasificación de los equipos dentro del torneo, con datos como Partidos Juagos, Victorias, Empates, Derrotas y Diferencia de Goles.
-
-## Tareas Segundo Plano
-### Servicios
-Los servicios que vamos a implementar en este caso están fuertemente relacionados con las API que vamos a emplear:
-- Firebase Auuthentication: Vamos a emplear el modelo de autenticación que nos distribuye Firebase para ello haremos uso del servicio de google **play-services-auth**. Con este podremos conseguir que todos los usuarios que vayan a utilizar la aplicación se inscriban con una cuenta de Google, que podremos gestionar dede Firebase. 
-- FireBase RealTimeDatabse: Vamos a emplear la base de datos en tiempo real de Firebase para todos los datos que se van a guardar. 
-- Google Maps (Location service): Mediante la API que distribuye Google, vamos a tener en un fragment un mapa activo constantemente sobre el que se desarolla gran parte de nuestra aplicación. Este service **play-services-location**, tras gestionar los permisos de localización, nos permite mantenar un mapa actualizado con eventos antiguos y nuevos por igual. Además en el mapa se mostrará la localización del usuario en todo momento. Se buscará en un futuro ampliar el uso de este mapa y la localización para la creación de rutas de ayuda para saber como llegar a cada uno de los eventos.
-### Corrutinas 
-En cuanto a corrutinas, para evitar bloquear el Thread principal su uso se va a centrar en los puntos que pueden resultar más "complejos".
-- Se buscará que las peticiones a la base de datos de Firebase, sean de escritura o lectura se ejecuten mediante corrutinas evitando sobrecargar el thread principal.
-- Cada vez que accedemos a la información de un evento queremos que entre su información se muestre el tiempo que hará ese día. Para ello hacemos uso de OpenWeatherMap. Esta es una API que combinando su uso con RetroFit nos permite hacer consultas directamente desde la APP. Como no queremos esperar a la respuesta de estas consultas para poder abrir la pantalla, estas peticiones GET se han aislado en una corrutina. Esto permite a la aplicación cargar el fragment correspondiente aunque el ImageView y TextViews con los datos no hayan recibido los datos. Así se puede ver que al acceder al Fragment del torneo 1 la información sobre el tiempo aparece unos segundos más tarde. Evitamos por lo tanto con esta petición asíncrona bloquear el main thread.
-
-## Geolocalización
-Para localización se ha empleado la API propuesta en clase de Google Maps Platform. Con ella en el fragment principal se han incluido ya un mapa funcional en el que se muestra nuestra ubicación en todo momento tras pedirle los permisos requeridos al usuario. Esta ubicación se actuliza mediante un request cada cierto intervalo de tiempo. En este mismo mapa se han configurado manualmente en este punto unos marcadores que son los que permiten acceder a los eventos. En cuanto estos eventos se guarden en una base de datos se espera poder acceder a ellos mediante llamads y no como ahora que son simples datos "inscrutados" en la aplicación. 
-Se ha intententando que este eventos solo aparezcan en pantalla si la distancia a ellos con respecto a la última localización es menor que 1 km pero por ahora no se ha logrado. 
-Queda implementar tambien un sistema de rutas gracias al botón como llegar, pero dado que no tenemos eventos guardados en bases de datos con sus ubicaciones se prefiere hacerlo cuando estas estén bien definidas.
-
-
-
-
-
-
 
