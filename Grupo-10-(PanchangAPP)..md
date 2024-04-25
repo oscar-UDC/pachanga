@@ -1,4 +1,3 @@
-# Grupo 10 (PanchangAPP).
 ## Integrantes y roles
 - **(CEO) Julián Barcia Facal**
 Encargado de coordinación, comunicación, documentación y gestión del proyecto. Realizará testing de integración, al igual que participará en la unificación y creación de módulos da arquitectura.
