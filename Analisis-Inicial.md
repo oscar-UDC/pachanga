@@ -17,8 +17,7 @@ Este proyecto se centra en el desarrollo de una aplicación que facilite un mét
 - **Edición de formato del evento creado (casuales y torneo). Dependiendo del formato elegido, las opciones presentes al usuario cambian, puesto que el primero implica fijar un total de participantes a los que se suman jugadores. En el segundo caso, se deben crear primero equipos a los cuales se inscriben los jugadores** _Tarea coordinada entre todos los integrantes del grupo puesto se coordina las funcionalidad en la app con la base de datos._
 - **Sistema de ranking de usuario y de equipos, mediante una variable de puntos totales** _Coordinación entre COO y CXO_
 - **Geolocalización del usuario en tiempo real. Esta funcionalidad es crítica, puesto que el usuario solo podrá ver los eventos en el mapa si tiene la localización activada y si estos se encuentran dentro de su rango definido de alcance.** _Tarea principalmente a cargo del CEO_
-- **
-### No críticas_
+### No críticas:
 - **Módulo de información sobre el clima en la localización del evento en tiempo real. Mediante el uso de una API externa en el evento se debe mostrar un indicador de la temperatura y tiempo en el lugar del evento** _Tarea del CEO_
 - **Creación de indicador de como llegar a la localización del evento. Dentro de cada uno de los eventos mediante un botón de como llegar se podrá acceder a un fragment que muestra una ruta calculada de como llegar al evento y de su distancia y duración** _Tarea del CEO_
 
